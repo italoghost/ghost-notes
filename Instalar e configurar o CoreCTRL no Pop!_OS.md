@@ -16,7 +16,7 @@ Em seguida, podemos instalar:
 sudo apt install corectrl
 ```
 
-Com o aplicativo instalado, podemos realizar algumas configurações para i) iniciar com o boot do sistema; ii) não pedir senha de acesso e; iii) liberar funções extras.
+Com o aplicativo instalado, podemos realizar algumas configurações para i) iniciar com o boot do sistema; ii) não pedir senha de acesso e; iii) adicionar funções avanç.
 
 Infelizmente, a [página de instruções para a configuração não é muito detalhada](https://gitlab.com/corectrl/corectrl/-/wikis/Setup), principalmente para sistemas que não utilizam o `grub` como meio de inicialização do sistema.
 
