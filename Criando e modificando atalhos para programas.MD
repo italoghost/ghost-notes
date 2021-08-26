@@ -1,4 +1,4 @@
-# Criando ou modificando arquivos de desktop
+## Criando ou modificando arquivos de desktop
 
 Para criar/modificar os atalhos nos programas (e suas integrações com o sistema), basta ir na seguinte pasta:
 
@@ -48,6 +48,6 @@ Categories=Game;
 Keywords=MangoHud;vkBasalt;ReplaySorcery;afterburner
 ```
 
-# Excluindo arquivos
+## Excluindo arquivos
 
 Em relação à programas que não "somem" do sistema após a desisntalação, com o ícone ainda persistindo, basta excluir o arquivo correspondente. Isso já aconteceu comigo com um jogo que instalei.
