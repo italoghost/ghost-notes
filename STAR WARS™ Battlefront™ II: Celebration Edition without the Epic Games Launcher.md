@@ -25,14 +25,14 @@ We are going to use the commands that are stated on the "Old Method" session of 
 
 Where: 
 
-- The env `WINEDLLOVERRIDES="nvapi, nvapi64=d"` is useful if the game fails to launch with message "outdated nvidia drivers..." (in case you are using NVIDIA);
+- The env `WINEDLLOVERRIDES="nvapi, nvapi64=d"` is useful if the game fails to launch, prompting the user with the message "outdated nvidia drivers...";
 - `WINEPREFIX="<prefix_where_origin_is_installed>" wine64` specifies that the prefix should be 64 bits;
 - `"<prefix_where_origin_is_installed>/drive_c/Program Files (x86)/Origin/EALink.exe"` specifies that the executable should be the "EALink.exe", and;
 - `"link2ea://launchgame/MtMassive?AUTH_PASSWORD=0&AUTH_TYPE=exchangecode&epicusername=myusername&epicuserid=myepicuserid&epiclocale=en&theme=sws&platform=epic&Hotfix=go"` is the command from the *legendary*'s wiki responsable for launching the game directly from Origin.
 
 2) If you are using Lutris, you should already have a prefix with both Origin and the game installed. 
 
-Click on the plus icon ("+") on the top left corner, select "Add a localy installed game" and fill the game's name, year and runner (it must be Wine).
+Click on the plus icon ("+") on the top left corner, select "Add a locally installed game" and fill the game's name, year and runner (it must be Wine).
 
 Go to the "Game options" tab and click on "Executable". Select the "EALink.exe" from the Origin folder (it should be on `"<prefix_where_origin_is_installed>/drive_c/Program Files (x86)/Origin/EALink.exe"`).
 On "Arguments", copy and paste the following command:
