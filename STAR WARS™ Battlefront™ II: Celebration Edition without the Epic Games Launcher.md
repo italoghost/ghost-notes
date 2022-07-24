@@ -54,3 +54,9 @@ Finally, on the "System Options" tab, go to the "Environment variables" and add 
 |__GL_SHADER_DISK_CACHE_PATH| <prefix_where_origin_is_installed>|
 
 Now the game should already be able to run without the need for installing Epic Games Launcher on your prefix!
+
+---
+
+Useful links:
+
+- [Installing Star Wars: Battlefront II with Legendary](https://gist.github.com/derrod/333fb5218002347435b7f31d532cbd01) (special thanks to the @Hadrianneue user) 
