@@ -59,4 +59,4 @@ Now the game should already be able to run without the need for installing Epic 
 
 Useful links:
 
-- [Installing Star Wars: Battlefront II with Legendary](https://gist.github.com/derrod/333fb5218002347435b7f31d532cbd01) (special thanks to the @Hadrianneue user) 
+- [Installing Star Wars: Battlefront II with Legendary](https://gist.github.com/derrod/333fb5218002347435b7f31d532cbd01) (special thanks to the user @Hadrianneue) 
