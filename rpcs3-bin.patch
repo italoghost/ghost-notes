@@ -1,0 +1,150 @@
+--- /home/ghost/repos/rpcs3-bin/PKGBUILD	2024-07-22 15:44:57.000000000 -0300
++++ /home/ghost/repos/rpcs3-appimage/PKGBUILD	2024-07-23 21:56:46.658429360 -0300
+@@ -1,109 +1,49 @@
+-# Maintainer: Sanpi <sanpi+aur@homecomputing.fr>
+-
+-# URL for the latest release
++pkgname=rpcs3-appimage
++_pkgname=rpcs3
+ _url="$(curl -s "https://api.github.com/repos/RPCS3/rpcs3-binaries-linux/releases/latest" | awk -F'"' '/browser_download_url.*rpcs3.*AppImage/ {print $4}')"
+-# Build ID
+ _build="$(echo $_url | awk -F '[-/]' '{print $11}')"
+-# AppImage version
+ _pkgver="$(echo $_url | awk -F '[-_]' -v OFS='-' '{gsub("v", "", $5); print $5,$6,$7}')"
+-
+-pkgname=rpcs3-bin
+-# Overwrited the "-" for "_" as instructed on the ArchWiki. It will change dynamically
+-# everytime there is a new release. It just need to be recompiled.
+-pkgver="$(echo $_url | awk -F '[-_]' -v OFS='_' '{gsub("v", "", $5); print $5,$6,$7}')"
+-pkgrel=2
++pkgver="$(echo $_url | awk -F '[-_]' -v OFS='.' '{gsub("v", "", $5); print $5,$6}')"
++pkgrel=1
+ pkgdesc='Open-source Sony PlayStation 3 Emulator'
+ arch=('x86_64')
+ url='https://rpcs3.net/'
+ license=('GPL2')
+-depends=(
+-  alsa-lib
+-  glew
+-  glu
+-  libevdev
+-  libgl
+-  libice
+-  libpng
+-  libpulse
+-  libsm
+-  libx11
+-  libxext
+-  ncurses5-compat-libs
+-  openal
+-  qt6-base
+-  qt6-declarative
+-  qt6-multimedia
+-  qt6-svg
+-  sdl2
+-  vulkan-icd-loader
+-  zlib
+-  curl
+-  wolfssl
+-  flatbuffers
+-  pugixml
+-)
+-makedepends=('p7zip')
+ options=('!strip')
+-replaces=('rpcs3')
+-provides=('rpcs3')
+-conflicts=('rpcs3')
+-# curl --silent --dump-header - https://github.com/RPCS3/rpcs3-binaries-linux/releases/latest | grep -i '^location: ' | sed 's#/tag/#/download/#'
+-_latest_release="https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-f1ef3bdcd7e2b22ecce67705d931de6b43fb9a20"
+-source=("https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-$_build/rpcs3-v${_pkgver}_linux64.AppImage")
++replaces=("$_pkgname")
++provides=("$_pkgname")
++conflicts=("$_pkgname")
++options=('!strip')
++_appimage="rpcs3-v${_pkgver}_linux64.AppImage"
++source=("https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-${_build}/${_appimage}")
++noextract=("${_appimage}")
+ sha256sums=('SKIP')
+ 
+-prepare()
+-{
+-    cd "$srcdir"
+-
+-    7z x -y "$srcdir/rpcs3-v${_pkgver}_linux64.AppImage"
++build() {
++  # extract appimage
++  cd "${srcdir}"
++  chmod +x "${_appimage}"
++  ./"${_appimage}" --appimage-extract
++  
++  # update script
++  sed -i "s|appdir=\$(readlink -f \${APPDIR:-\$(dirname \"\$0\")})|appdir=\"/opt/rpcs3\"|" "$srcdir/squashfs-root/AppRun"
+ }
+ 
+-package()
+-{
+-    cd "${srcdir}"
+-
+-    install -D -m755 'usr/bin/rpcs3' "$pkgdir/usr/bin/rpcs3"
+-    install -D -m644 'usr/share/applications/rpcs3.desktop' "$pkgdir/usr/share/applications/rpcs3.desktop"
+-    install -D -m644 'usr/share/icons/hicolor/48x48/apps/rpcs3.png' "$pkgdir/usr/share/icons/hicolor/48x48/apps/rpcs3.png"
+-    install -D -m644 'usr/share/icons/hicolor/scalable/apps/rpcs3.svg' "$pkgdir/usr/share/icons/hicolor/scalable/apps/rpcs3.svg"
+-    install -D -m644 'usr/share/metainfo/rpcs3.metainfo.xml' "$pkgdir/usr/share/memetainfo/rpcs3.metainfo.xml"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/circle.png' "$pkgdir/usr/share/rpcs3/Icons/ui/circle.png"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/cross.png' "$pkgdir/usr/share/rpcs3/Icons/ui/cross.png"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/dpad_down.png' "$pkgdir/usr/share/rpcs3/Icons/ui/dpad_down.png"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/dpad_left.png' "$pkgdir/usr/share/rpcs3/Icons/ui/dpad_left.png"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/dpad.png' "$pkgdir/usr/share/rpcs3/Icons/ui/dpad.png"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/dpad_right.png' "$pkgdir/usr/share/rpcs3/Icons/ui/dpad_right.png"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/dpad_up.png' "$pkgdir/usr/share/rpcs3/Icons/ui/dpad_up.png"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/fade_bottom.png' "$pkgdir/usr/share/rpcs3/Icons/ui/fade_bottom.png"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/fade_top.png' "$pkgdir/usr/share/rpcs3/Icons/ui/fade_top.png"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/L1.png' "$pkgdir/usr/share/rpcs3/Icons/ui/L1.png"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/L2.png' "$pkgdir/usr/share/rpcs3/Icons/ui/L2.png"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/left_stick.png' "$pkgdir/usr/share/rpcs3/Icons/ui/left_stick.png"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/new.png' "$pkgdir/usr/share/rpcs3/Icons/ui/new.png"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/R1.png' "$pkgdir/usr/share/rpcs3/Icons/ui/R1.png"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/R2.png' "$pkgdir/usr/share/rpcs3/Icons/ui/R2.png"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/right_stick.png' "$pkgdir/usr/share/rpcs3/Icons/ui/right_stick.png"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/save.png' "$pkgdir/usr/share/rpcs3/Icons/ui/save.png"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/select.png' "$pkgdir/usr/share/rpcs3/Icons/ui/select.png"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/square.png' "$pkgdir/usr/share/rpcs3/Icons/ui/square.png"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/start.png' "$pkgdir/usr/share/rpcs3/Icons/ui/start.png"
+-    install -D -m644 'usr/share/rpcs3/Icons/ui/triangle.png' "$pkgdir/usr/share/rpcs3/Icons/ui/triangle.png"
+-    install -D -m644 'usr/share/rpcs3/GuiConfigs/Classic (Bright).qss' "$pkgdir/usr/share/rpcs3/GuiConfigs/Classic (Bright).qss"
+-    install -D -m644 'usr/share/rpcs3/GuiConfigs/Darker Style by TheMitoSan.qss' "$pkgdir/usr/share/rpcs3/GuiConfigs/Darker Style by TheMitoSan.qss"
+-    install -D -m644 'usr/share/rpcs3/GuiConfigs/Envy.qss' "$pkgdir/usr/share/rpcs3/GuiConfigs/Envy.qss"
+-    install -D -m644 'usr/share/rpcs3/GuiConfigs/kot-bg.jpg' "$pkgdir/usr/share/rpcs3/GuiConfigs/kot-bg.jpg"
+-    install -D -m644 'usr/share/rpcs3/GuiConfigs/Kuroi (Dark) by Ani.qss' "$pkgdir/usr/share/rpcs3/GuiConfigs/Kuroi (Dark) by Ani.qss"
+-    install -D -m644 'usr/share/rpcs3/GuiConfigs/list_arrow_blue.png' "$pkgdir/usr/share/rpcs3/GuiConfigs/list_arrow_blue.png"
+-    install -D -m644 'usr/share/rpcs3/GuiConfigs/list_arrow_down_blue.png' "$pkgdir/usr/share/rpcs3/GuiConfigs/list_arrow_down_blue.png"
+-    install -D -m644 'usr/share/rpcs3/GuiConfigs/list_arrow_down_green.png' "$pkgdir/usr/share/rpcs3/GuiConfigs/list_arrow_down_green.png"
+-    install -D -m644 'usr/share/rpcs3/GuiConfigs/list_arrow_down_white.png' "$pkgdir/usr/share/rpcs3/GuiConfigs/list_arrow_down_white.png"
+-    install -D -m644 'usr/share/rpcs3/GuiConfigs/list_arrow_green.png' "$pkgdir/usr/share/rpcs3/GuiConfigs/list_arrow_green.png"
+-    install -D -m644 'usr/share/rpcs3/GuiConfigs/list_arrow_white.png' "$pkgdir/usr/share/rpcs3/GuiConfigs/list_arrow_white.png"
+-    install -D -m644 'usr/share/rpcs3/GuiConfigs/ModernBlue Theme by TheMitoSan.qss' "$pkgdir/usr/share/rpcs3/GuiConfigs/ModernBlue Theme by TheMitoSan.qss"
+-    install -D -m644 'usr/share/rpcs3/GuiConfigs/Nekotekina by GooseWing.qss' "$pkgdir/usr/share/rpcs3/GuiConfigs/Nekotekina by GooseWing.qss"
+-    install -D -m644 'usr/share/rpcs3/GuiConfigs/Skyline (Nightfall).qss' "$pkgdir/usr/share/rpcs3/GuiConfigs/Skyline (Nightfall).qss"
+-    install -D -m644 'usr/share/rpcs3/GuiConfigs/Skyline.qss' "$pkgdir/usr/share/rpcs3/GuiConfigs/Skyline.qss"
+-    install -D -m644 'usr/share/rpcs3/GuiConfigs/YoRHa-background.jpg' "$pkgdir/usr/share/rpcs3/GuiConfigs/YoRHa-background.jpg"
+-    install -D -m644 'usr/share/rpcs3/GuiConfigs/YoRHa by Ani.qss' "$pkgdir/usr/share/rpcs3/GuiConfigs/YoRHa by Ani.qss"
+-}
++package() {
++  # main files
++  install -dm755 "$pkgdir/opt/${_pkgname}"
++  mv "$srcdir"/squashfs-root/* "$pkgdir/opt/${_pkgname}"
++
++  # script
++  install -dm755 "$pkgdir/usr/bin"
++  ln -sf "/opt/${_pkgname}/AppRun" "$pkgdir/usr/bin/${_pkgname}"
++
++  # icon
++  install -Dm644 "$pkgdir/opt/${_pkgname}/${_pkgname}.svg" -t "$pkgdir/usr/share/pixmaps"
++
++  # launcher
++  install -Dm644 "$pkgdir/opt/${_pkgname}/${_pkgname}.desktop" -t "$pkgdir/usr/share/applications"
++
++  # permissions
++  chmod -R u+rwX,go+rX,go-w "$pkgdir/"
++}
+\ Nenhum caractere de nova linha no final do arquivo
